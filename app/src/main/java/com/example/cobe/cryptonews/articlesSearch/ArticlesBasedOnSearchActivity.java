@@ -32,8 +32,7 @@ public class ArticlesBasedOnSearchActivity extends AppCompatActivity implements 
 
     private static final String PUBLISHED_AT = "publishedAt";
     private static final String API_KEY = "7bd2f92ac63845d8bbd831a30c423140";
-
-    String searchWord;
+    private String searchWord;
     private final ArticleAdapter adapter = new ArticleAdapter();
 
     @BindView(R.id.rvArticlesSearchList)
@@ -96,7 +95,6 @@ public class ArticlesBasedOnSearchActivity extends AppCompatActivity implements 
 
     @Override
     public void onFailure(@NonNull Call<ArticlesResponse> call, @NonNull Throwable t) {
-
     }
 
     @Override

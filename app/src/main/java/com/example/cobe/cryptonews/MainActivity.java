@@ -8,9 +8,9 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.cobe.cryptonews.api.ApiClient;
@@ -43,6 +43,8 @@ public class MainActivity extends AppCompatActivity implements Callback<Articles
     Button showArticlesBasedOnInput;
     @BindView(R.id.etInputWord)
     EditText searchWord;
+    @BindView(R.id.selectDate)
+    ImageView selectDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -11,13 +11,25 @@
         android:background="@color/colorPrimary"
         android:padding="@dimen/margin_item_list">
 
+        <ImageView
+            android:id="@+id/selectDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_date"
+            android:tint="@color/white" />
+
         <EditText
             android:id="@+id/etInputWord"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/selectDate"
+            android:layout_toRightOf="@+id/selectDate"
+            android:focusable="false"
+            android:focusableInTouchMode="true"
             android:hint="@string/search_articles"
-            android:textColorHint="@color/white"
-            android:textColor="@color/white"/>
+            android:textColor="@color/white"
+            android:textColorHint="@color/grey" />
 
         <Button
             android:id="@+id/showArticlesBasedOnInput"
@@ -25,7 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_toEndOf="@+id/etInputWord"
             android:layout_toRightOf="@+id/etInputWord"
-            android:text="@string/search"/>
+            android:text="@string/search" />
 
     </RelativeLayout>
 
