@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">CryptoNews</string>
+    <string name="error_cant_get_articles">ERROR - cant get articles. Try later!</string>
 </resources>

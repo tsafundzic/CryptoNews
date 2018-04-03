@@ -18,13 +18,34 @@ android {
     }
 }
 
+ext {
+    supportLib = "26.1.0"
+    butterKnifeLib = "8.8.1"
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:appcompat-v7:26.1.0'
+
+    //support Library
+    implementation "com.android.support:appcompat-v7:$supportLib"
+    implementation "com.android.support:recyclerview-v7:$supportLib"
+
+    //butterKnife
+    compile "com.jakewharton:butterknife:$butterKnifeLib"
+    annotationProcessor "com.jakewharton:butterknife-compiler:$butterKnifeLib"
+
+    //ui
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+
+    //retrofit
     compile 'com.squareup.retrofit2:retrofit:2.4.0'
-    compile 'com.squareup.retrofit2:converter-simplexml:2.4.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.2'
+
+    //glide
+    compile 'com.github.bumptech.glide:glide:3.7.0'
 }

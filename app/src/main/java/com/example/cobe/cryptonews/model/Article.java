@@ -1,48 +1,47 @@
 package com.example.cobe.cryptonews.model;
 
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.Root;
+
+import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
 
 /**
  * Created by cobe on 29/03/2018.
  */
 
-@Root(name = "item", strict = false)
 public class Article {
-
-    @Element(name = "title")
+    private Source source;
+    private String author;
     private String title;
-
-    @Element(name = "link")
-    private String link;
-
-    @Element(name = "description")
     private String description;
+    private String url;
+    private String urlToImage;
+    private String publishedAt;
 
-    @Element(name = "enclosure")
-    private String image;
-
-    @Element(name = "guid")
-    private String guid;
-
-    @Element(name = "pubDate")
-    private String pubDate;
-
-    @Element(name = "dc:creator")
-    private String creator;
-
-    @Element(name = "category")
-    private String category;
-
-    public Article(String title, String link, String description, String image, String guid, String pubDate, String creator, String category) {
+    public Article(Source source, String author, String title, String description, String url, String urlToImage, String publishedAt) {
+        this.source = source;
+        this.author = author;
         this.title = title;
-        this.link = link;
         this.description = description;
-        this.image = image;
-        this.guid = guid;
-        this.pubDate = pubDate;
-        this.creator = creator;
-        this.category = category;
+        this.url = url;
+        this.urlToImage = urlToImage;
+        this.publishedAt = publishedAt;
+    }
+
+    public Source getSource() {
+        return source;
+    }
+
+    public void setSource(Source source) {
+        this.source = source;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
     }
 
     public String getTitle() {
@@ -53,14 +52,6 @@ public class Article {
         this.title = title;
     }
 
-    public String getLink() {
-        return link;
-    }
-
-    public void setLink(String link) {
-        this.link = link;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -69,43 +60,28 @@ public class Article {
         this.description = description;
     }
 
-    public String getImage() {
-        return image;
+    public String getUrl() {
+        return url;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
-    public String getGuid() {
-        return guid;
+    public String getUrlToImage() {
+        return urlToImage;
     }
 
-    public void setGuid(String guid) {
-        this.guid = guid;
+    public void setUrlToImage(String urlToImage) {
+        this.urlToImage = urlToImage;
     }
 
-    public String getPubDate() {
-        return pubDate;
+    public String getPublishedAt() {
+        return publishedAt;
     }
 
-    public void setPubDate(String pubDate) {
-        this.pubDate = pubDate;
+    public void setPublishedAt(String publishedAt) {
+        this.publishedAt = publishedAt;
     }
 
-    public String getCreator() {
-        return creator;
-    }
-
-    public void setCreator(String creator) {
-        this.creator = creator;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
 }

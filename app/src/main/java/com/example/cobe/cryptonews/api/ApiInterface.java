@@ -1,6 +1,6 @@
 package com.example.cobe.cryptonews.api;
 
-import com.example.cobe.cryptonews.model.RSSFeed;
+import com.example.cobe.cryptonews.model.ArticlesResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -11,6 +11,6 @@ import retrofit2.http.Query;
  */
 
 public interface ApiInterface {
-    @GET("feedbuilder/feed/getfeed/")
-    Call<RSSFeed> getArticles(@Query("feedName") String feedName);
+    @GET("v2/everything")
+    Call<ArticlesResponse> getArticles(@Query("sources") String sources, @Query("apiKey") String apiKey);
 }
