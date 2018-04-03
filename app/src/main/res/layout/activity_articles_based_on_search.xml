@@ -1,36 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
     <RelativeLayout
-        android:id="@+id/actionBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         android:padding="@dimen/margin_item_list">
 
-        <EditText
-            android:id="@+id/etInputWord"
+        <ImageView
+            android:id="@+id/back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="@string/search_articles"
-            android:textColorHint="@color/white"
-            android:textColor="@color/white"/>
+            android:src="@drawable/ic_back"
+            android:tint="@color/white" />
 
-        <Button
-            android:id="@+id/showArticlesBasedOnInput"
+        <TextView
+            android:id="@+id/tvSearchWord"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@+id/etInputWord"
-            android:layout_toRightOf="@+id/etInputWord"
-            android:text="@string/search"/>
+            android:layout_centerInParent="true"
+            android:textSize="@dimen/article_title"
+            android:textColor="@color/white"/>
 
     </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvArticleList"
+        android:id="@+id/rvArticlesSearchList"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

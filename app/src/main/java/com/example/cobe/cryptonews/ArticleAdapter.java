@@ -27,7 +27,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleViewHolder> {
         return new ArticleViewHolder(view, onArticleClickListener);
     }
 
-    void setOnArticleClickListener(OnArticleClickListener onArticleClickListener) {
+    public void setOnArticleClickListener(OnArticleClickListener onArticleClickListener) {
         this.onArticleClickListener = onArticleClickListener;
     }
 
@@ -39,7 +39,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleViewHolder> {
         }
     }
 
-    void setArticles(List<Article> articles) {
+    public void setArticles(List<Article> articles) {
         this.articles.clear();
         this.articles.addAll(articles);
         notifyDataSetChanged();

@@ -1,5 +1,6 @@
-package com.example.cobe.cryptonews;
+package com.example.cobe.cryptonews.articlesSearch;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -7,16 +8,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.TextView;
 
+import com.example.cobe.cryptonews.ArticleAdapter;
+import com.example.cobe.cryptonews.R;
 import com.example.cobe.cryptonews.api.ApiClient;
 import com.example.cobe.cryptonews.api.ApiInterface;
-import com.example.cobe.cryptonews.articlesSearch.ArticlesBasedOnSearchActivity;
-import com.example.cobe.cryptonews.comm.ValidationUtils;
 import com.example.cobe.cryptonews.listeners.OnArticleClickListener;
 import com.example.cobe.cryptonews.model.Article;
 import com.example.cobe.cryptonews.model.ArticlesResponse;
@@ -30,28 +28,35 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity implements Callback<ArticlesResponse>, OnArticleClickListener {
+public class ArticlesBasedOnSearchActivity extends AppCompatActivity implements Callback<ArticlesResponse>, OnArticleClickListener {
 
-    private static final String SOURCES = "crypto-coins-news";
+    private static final String PUBLISHED_AT = "publishedAt";
     private static final String API_KEY = "7bd2f92ac63845d8bbd831a30c423140";
 
+    String searchWord;
     private final ArticleAdapter adapter = new ArticleAdapter();
 
-    @BindView(R.id.rvArticleList)
+    @BindView(R.id.rvArticlesSearchList)
     RecyclerView recyclerView;
-    @BindView(R.id.showArticlesBasedOnInput)
-    Button showArticlesBasedOnInput;
-    @BindView(R.id.etInputWord)
-    EditText searchWord;
+    @BindView(R.id.tvSearchWord)
+    TextView searchedWord;
+    @BindView(R.id.back)
+    View back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_articles_based_on_search);
 
         ButterKnife.bind(this);
+        receiveSearchWord();
+        setUI();
         apiCall();
         setAdapter();
+    }
+
+    private void setUI() {
+        searchedWord.setText(searchWord);
     }
 
     private void setAdapter() {
@@ -61,18 +66,25 @@ public class MainActivity extends AppCompatActivity implements Callback<Articles
         adapter.setOnArticleClickListener(this);
     }
 
-    @OnClick(R.id.showArticlesBasedOnInput)
-    public void startSearch() {
-        if (ValidationUtils.isEmpty(searchWord.getText().toString())) {
-            searchWord.setError(getText(R.string.wrong_input));
-        } else {
-            startActivity(ArticlesBasedOnSearchActivity.getLaunchIntent(this, searchWord.getText().toString()));
-        }
+    @OnClick(R.id.back)
+    public void returnBack() {
+        onBackPressed();
+    }
+
+    public static Intent getLaunchIntent(Context from, String searchWord) {
+        Intent intent = new Intent(from, ArticlesBasedOnSearchActivity.class);
+        intent.putExtra("SEARCH", searchWord);
+        return intent;
+    }
+
+    private void receiveSearchWord() {
+        Intent intent = getIntent();
+        searchWord = intent.getStringExtra("SEARCH");
     }
 
     private void apiCall() {
         ApiInterface api = ApiClient.getClient().create(ApiInterface.class);
-        Call<ArticlesResponse> call = api.getArticles(SOURCES, API_KEY);
+        Call<ArticlesResponse> call = api.getArticlesBasedOnTypedWord(searchWord, PUBLISHED_AT, API_KEY);
         call.enqueue(this);
     }
 
@@ -84,8 +96,7 @@ public class MainActivity extends AppCompatActivity implements Callback<Articles
 
     @Override
     public void onFailure(@NonNull Call<ArticlesResponse> call, @NonNull Throwable t) {
-        Toast.makeText(this, R.string.error_cant_get_articles, Toast.LENGTH_SHORT).show();
-        Log.e("Error", t.toString());
+
     }
 
     @Override

@@ -13,4 +13,7 @@ import retrofit2.http.Query;
 public interface ApiInterface {
     @GET("v2/everything")
     Call<ArticlesResponse> getArticles(@Query("sources") String sources, @Query("apiKey") String apiKey);
+
+    @GET("v2/everything")
+    Call<ArticlesResponse> getArticlesBasedOnTypedWord(@Query("q") String typedWord, @Query("sortBy") String sort, @Query("apiKey") String apiKey);
 }
