@@ -30,9 +30,9 @@ import retrofit2.Response;
 
 public class ArticlesBasedOnSearchActivity extends AppCompatActivity implements Callback<ArticlesResponse>, OnArticleClickListener {
 
-    private static final String PUBLISHED_AT = "publishedAt";
     private static final String API_KEY = "7bd2f92ac63845d8bbd831a30c423140";
     private String searchWord;
+    private String date;
     private final ArticleAdapter adapter = new ArticleAdapter();
 
     @BindView(R.id.rvArticlesSearchList)
@@ -48,7 +48,8 @@ public class ArticlesBasedOnSearchActivity extends AppCompatActivity implements 
         setContentView(R.layout.activity_articles_based_on_search);
 
         ButterKnife.bind(this);
-        receiveSearchWord();
+
+        receiveSearchWordAndDate();
         setUI();
         apiCall();
         setAdapter();
@@ -70,20 +71,22 @@ public class ArticlesBasedOnSearchActivity extends AppCompatActivity implements 
         onBackPressed();
     }
 
-    public static Intent getLaunchIntent(Context from, String searchWord) {
+    public static Intent getLaunchIntent(Context from, String searchWord, String date) {
         Intent intent = new Intent(from, ArticlesBasedOnSearchActivity.class);
         intent.putExtra("SEARCH", searchWord);
+        intent.putExtra("DATE", date);
         return intent;
     }
 
-    private void receiveSearchWord() {
+    private void receiveSearchWordAndDate() {
         Intent intent = getIntent();
         searchWord = intent.getStringExtra("SEARCH");
+        date = intent.getStringExtra("DATE");
     }
 
     private void apiCall() {
         ApiInterface api = ApiClient.getClient().create(ApiInterface.class);
-        Call<ArticlesResponse> call = api.getArticlesBasedOnTypedWord(searchWord, PUBLISHED_AT, API_KEY);
+        Call<ArticlesResponse> call = api.getArticleBasedOnDateAndTypedWord(searchWord, date, date, API_KEY);
         call.enqueue(this);
     }
 

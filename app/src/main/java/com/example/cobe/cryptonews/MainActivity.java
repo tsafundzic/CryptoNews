@@ -17,6 +17,7 @@ import com.example.cobe.cryptonews.api.ApiClient;
 import com.example.cobe.cryptonews.api.ApiInterface;
 import com.example.cobe.cryptonews.articlesSearch.ArticlesBasedOnSearchActivity;
 import com.example.cobe.cryptonews.comm.ValidationUtils;
+import com.example.cobe.cryptonews.dialog.DialogDatePicker;
 import com.example.cobe.cryptonews.listeners.OnArticleClickListener;
 import com.example.cobe.cryptonews.model.Article;
 import com.example.cobe.cryptonews.model.ArticlesResponse;
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements Callback<Articles
     private static final String API_KEY = "7bd2f92ac63845d8bbd831a30c423140";
 
     private final ArticleAdapter adapter = new ArticleAdapter();
+    private String date;
 
     @BindView(R.id.rvArticleList)
     RecyclerView recyclerView;
@@ -63,15 +65,6 @@ public class MainActivity extends AppCompatActivity implements Callback<Articles
         adapter.setOnArticleClickListener(this);
     }
 
-    @OnClick(R.id.showArticlesBasedOnInput)
-    public void startSearch() {
-        if (ValidationUtils.isEmpty(searchWord.getText().toString())) {
-            searchWord.setError(getText(R.string.wrong_input));
-        } else {
-            startActivity(ArticlesBasedOnSearchActivity.getLaunchIntent(this, searchWord.getText().toString()));
-        }
-    }
-
     private void apiCall() {
         ApiInterface api = ApiClient.getClient().create(ApiInterface.class);
         Call<ArticlesResponse> call = api.getArticles(SOURCES, API_KEY);
@@ -95,4 +88,23 @@ public class MainActivity extends AppCompatActivity implements Callback<Articles
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         startActivity(intent);
     }
+
+
+    @OnClick(R.id.selectDate)
+    public void showDialog() {
+        date = DialogDatePicker.showDatePicker(this);
+    }
+
+    @OnClick(R.id.showArticlesBasedOnInput)
+    public void startSearch() {
+        if (ValidationUtils.isEmpty(searchWord.getText().toString())) {
+            searchWord.setError(getText(R.string.wrong_input));
+        } else {
+            Toast.makeText(this, date, Toast.LENGTH_SHORT).show();
+            startActivity(ArticlesBasedOnSearchActivity.getLaunchIntent(this, searchWord.getText().toString(), date));
+
+        }
+    }
+
+
 }
