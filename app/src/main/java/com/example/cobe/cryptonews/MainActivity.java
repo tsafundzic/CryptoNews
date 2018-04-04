@@ -8,15 +8,16 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.cobe.cryptonews.api.ApiClient;
 import com.example.cobe.cryptonews.api.ApiInterface;
+import com.example.cobe.cryptonews.articleDateSearch.ArticlesBasedOnSearchAndDateActivity;
 import com.example.cobe.cryptonews.articlesSearch.ArticlesBasedOnSearchActivity;
 import com.example.cobe.cryptonews.comm.ValidationUtils;
+import com.example.cobe.cryptonews.constants.ConstantsUtils;
 import com.example.cobe.cryptonews.dialog.DialogDatePicker;
 import com.example.cobe.cryptonews.listeners.OnArticleClickListener;
 import com.example.cobe.cryptonews.model.Article;
@@ -33,16 +34,13 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements Callback<ArticlesResponse>, OnArticleClickListener {
 
-    private static final String SOURCES = "crypto-coins-news";
-    private static final String API_KEY = "7bd2f92ac63845d8bbd831a30c423140";
-
     private final ArticleAdapter adapter = new ArticleAdapter();
     private String date;
 
     @BindView(R.id.rvArticleList)
     RecyclerView recyclerView;
     @BindView(R.id.showArticlesBasedOnInput)
-    Button showArticlesBasedOnInput;
+    ImageView showArticlesBasedOnInput;
     @BindView(R.id.etInputWord)
     EditText searchWord;
     @BindView(R.id.selectDate)
@@ -67,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements Callback<Articles
 
     private void apiCall() {
         ApiInterface api = ApiClient.getClient().create(ApiInterface.class);
-        Call<ArticlesResponse> call = api.getArticles(SOURCES, API_KEY);
+        Call<ArticlesResponse> call = api.getArticles(ConstantsUtils.SOURCES, ConstantsUtils.API_KEY);
         call.enqueue(this);
     }
 
@@ -89,10 +87,20 @@ public class MainActivity extends AppCompatActivity implements Callback<Articles
         startActivity(intent);
     }
 
-
     @OnClick(R.id.selectDate)
     public void showDialog() {
         date = DialogDatePicker.showDatePicker(this);
+        startSearchBasedOnDateAndWord();
+    }
+
+    public void startSearchBasedOnDateAndWord() {
+        if (ValidationUtils.isEmpty(searchWord.getText().toString())) {
+            searchWord.setError(getText(R.string.wrong_input));
+        } else if (date == null) {
+            Toast.makeText(this, getText(R.string.wrong_date), Toast.LENGTH_SHORT).show();
+        } else {
+            startActivity(ArticlesBasedOnSearchAndDateActivity.getLaunchIntent(this, searchWord.getText().toString(), date));
+        }
     }
 
     @OnClick(R.id.showArticlesBasedOnInput)
@@ -100,8 +108,7 @@ public class MainActivity extends AppCompatActivity implements Callback<Articles
         if (ValidationUtils.isEmpty(searchWord.getText().toString())) {
             searchWord.setError(getText(R.string.wrong_input));
         } else {
-            Toast.makeText(this, date, Toast.LENGTH_SHORT).show();
-            startActivity(ArticlesBasedOnSearchActivity.getLaunchIntent(this, searchWord.getText().toString(), date));
+            startActivity(ArticlesBasedOnSearchActivity.getLaunchIntent(this, searchWord.getText().toString()));
 
         }
     }

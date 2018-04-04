@@ -1,4 +1,4 @@
-package com.example.cobe.cryptonews.articlesSearch;
+package com.example.cobe.cryptonews.articleDateSearch;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,7 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.cobe.cryptonews.ArticleAdapter;
@@ -29,26 +29,29 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ArticlesBasedOnSearchActivity extends AppCompatActivity implements Callback<ArticlesResponse>, OnArticleClickListener {
+public class ArticlesBasedOnSearchAndDateActivity extends AppCompatActivity implements Callback<ArticlesResponse>, OnArticleClickListener {
+
+    private final ArticleAdapter adapter = new ArticleAdapter();
 
     private String searchWord;
-    private final ArticleAdapter adapter = new ArticleAdapter();
+    private String date;
 
     @BindView(R.id.rvArticlesSearchList)
     RecyclerView recyclerView;
+    @BindView(R.id.back)
+    ImageView back;
     @BindView(R.id.tvSearchWord)
     TextView searchedWord;
-    @BindView(R.id.back)
-    View back;
+    @BindView(R.id.tvSelectedDate)
+    TextView selectedDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_articles_based_on_search);
+        setContentView(R.layout.activity_articles_based_on_search_and_date);
 
         ButterKnife.bind(this);
-
-        receiveSearchWord();
+        receiveSearchWordAndDate();
         setUI();
         apiCall();
         setAdapter();
@@ -56,34 +59,36 @@ public class ArticlesBasedOnSearchActivity extends AppCompatActivity implements 
 
     private void setUI() {
         searchedWord.setText(searchWord);
+        selectedDate.setText(date);
+    }
+
+    public static Intent getLaunchIntent(Context from, String searchedWord, String date) {
+        Intent intent = new Intent(from, ArticlesBasedOnSearchAndDateActivity.class);
+        intent.putExtra("SEARCH", searchedWord);
+        intent.putExtra("DATE", date);
+        return intent;
+    }
+
+    public void receiveSearchWordAndDate() {
+        Intent intent = getIntent();
+        searchWord = intent.getStringExtra("SEARCH");
+        date = intent.getStringExtra("DATE");
     }
 
     private void setAdapter() {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
-
         adapter.setOnArticleClickListener(this);
     }
 
     @OnClick(R.id.back)
-    public void returnBack() {
+    public void goBack(){
         finish();
-    }
-
-    public static Intent getLaunchIntent(Context from, String searchWord) {
-        Intent intent = new Intent(from, ArticlesBasedOnSearchActivity.class);
-        intent.putExtra("SEARCH", searchWord);
-        return intent;
-    }
-
-    private void receiveSearchWord() {
-        Intent intent = getIntent();
-        searchWord = intent.getStringExtra("SEARCH");
     }
 
     private void apiCall() {
         ApiInterface api = ApiClient.getClient().create(ApiInterface.class);
-        Call<ArticlesResponse> call = api.getArticlesBasedOnTypedWord(searchWord, ConstantsUtils.API_KEY);
+        Call<ArticlesResponse> call = api.getArticleBasedOnDateAndTypedWord(searchWord, date, date, ConstantsUtils.API_KEY);
         call.enqueue(this);
     }
 
@@ -91,10 +96,12 @@ public class ArticlesBasedOnSearchActivity extends AppCompatActivity implements 
     public void onResponse(@NonNull Call<ArticlesResponse> call, @NonNull Response<ArticlesResponse> response) {
         List<Article> articles = response.body().getArticles();
         adapter.setArticles(articles);
+
     }
 
     @Override
     public void onFailure(@NonNull Call<ArticlesResponse> call, @NonNull Throwable t) {
+
     }
 
     @Override

@@ -4,4 +4,5 @@
     <string name="search">Search</string>
     <string name="search_articles">Search articles</string>
     <string name="wrong_input">Wrong input</string>
+    <string name="wrong_date">Wrong date, select date!</string>
 </resources>
