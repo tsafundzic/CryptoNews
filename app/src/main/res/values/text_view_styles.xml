@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="ToolbarTitleStyle">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/article_title</item>
+    </style>
+
+    <style name="ToolbarStyle">
+        <item name="android:padding">@dimen/margin_item_list</item>
+        <item name="android:background">@color/colorPrimary</item>
+    </style>
+
+</resources>

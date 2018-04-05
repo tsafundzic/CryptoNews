@@ -6,10 +6,9 @@
 
     <RelativeLayout
         android:id="@+id/actionBar"
+        style="@style/ToolbarStyle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        android:padding="@dimen/margin_item_list">
+        android:layout_height="?attr/actionBarSize">
 
         <EditText
             android:id="@+id/etInputWord"

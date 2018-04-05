@@ -5,5 +5,6 @@ package com.example.cobe.cryptonews.listeners;
  */
 
 public interface OnArticleClickListener {
+
     void onArticleClick(String url);
 }

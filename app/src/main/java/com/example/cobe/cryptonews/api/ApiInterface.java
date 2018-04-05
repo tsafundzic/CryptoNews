@@ -11,11 +11,9 @@ import retrofit2.http.Query;
  */
 
 public interface ApiInterface {
-    @GET("v2/everything")
-    Call<ArticlesResponse> getArticles(@Query("sources") String sources, @Query("apiKey") String apiKey);
 
     @GET("v2/everything")
-    Call<ArticlesResponse> getArticlesBasedOnTypedWord(@Query("q") String typedWord, @Query("apiKey") String apiKey);
+    Call<ArticlesResponse> getArticles(@Query("sources") String sources, @Query("apiKey") String apiKey);
 
     @GET("v2/everything")
     Call<ArticlesResponse> getArticleBasedOnDateAndTypedWord(@Query("q") String typedWord, @Query("from") String startDate, @Query("to") String endDate, @Query("apiKey") String apiKey);
