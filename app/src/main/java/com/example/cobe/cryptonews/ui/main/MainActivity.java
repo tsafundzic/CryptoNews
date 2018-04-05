@@ -55,17 +55,17 @@ public class MainActivity extends AppCompatActivity implements Callback<Articles
         setAdapter();
     }
 
+    private void getArticles() {
+        ApiInterface api = ApiClient.getApi();
+        Call<ArticlesResponse> call = api.getArticles(Constants.SOURCES, Constants.API_KEY);
+        call.enqueue(this);
+    }
+
     private void setAdapter() {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
 
         adapter.setOnArticleClickListener(this);
-    }
-
-    private void getArticles() {
-        ApiInterface api = ApiClient.getApi();
-        Call<ArticlesResponse> call = api.getArticles(Constants.SOURCES, Constants.API_KEY);
-        call.enqueue(this);
     }
 
     @Override
