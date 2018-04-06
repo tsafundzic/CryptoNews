@@ -3,7 +3,6 @@ package com.example.cobe.cryptonews.ui.main;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,15 +13,15 @@ import android.widget.Toast;
 
 import com.example.cobe.cryptonews.R;
 import com.example.cobe.cryptonews.api.ApiClient;
-import com.example.cobe.cryptonews.api.ApiInterface;
+import com.example.cobe.cryptonews.api.ArticlesInteractorImpl;
+import com.example.cobe.cryptonews.api.ArticlesInteractorInterface;
+import com.example.cobe.cryptonews.api.ResponseInterface;
 import com.example.cobe.cryptonews.comm.DialogUtils;
 import com.example.cobe.cryptonews.ui.articleSearch.ArticlesSearchActivity;
 import com.example.cobe.cryptonews.ui.articles.ArticleAdapter;
-import com.example.cobe.cryptonews.comm.ValidationUtils;
 import com.example.cobe.cryptonews.constants.Constants;
 import com.example.cobe.cryptonews.listeners.OnArticleClickListener;
 import com.example.cobe.cryptonews.model.Article;
-import com.example.cobe.cryptonews.model.ArticlesResponse;
 
 import java.util.Calendar;
 import java.util.List;
@@ -30,11 +29,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity implements Callback<ArticlesResponse>, OnArticleClickListener, DatePickerDialog.OnDateSetListener {
+public class MainActivity extends AppCompatActivity implements OnArticleClickListener, DatePickerDialog.OnDateSetListener, MainContract.View {
 
     @BindView(R.id.rvArticleList)
     RecyclerView recyclerView;
@@ -45,20 +41,22 @@ public class MainActivity extends AppCompatActivity implements Callback<Articles
     private final ArticleAdapter adapter = new ArticleAdapter();
     private String date;
 
+    private MainContract.Presenter presenter;
+    private ResponseInterface responseInterface;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         ButterKnife.bind(this);
-        getArticles();
-        setAdapter();
-    }
 
-    private void getArticles() {
-        ApiInterface api = ApiClient.getApi();
-        Call<ArticlesResponse> call = api.getArticles(Constants.SOURCES, Constants.API_KEY);
-        call.enqueue(this);
+        ArticlesInteractorInterface articlesInteractor = new ArticlesInteractorImpl(ApiClient.getApi());
+
+        presenter = new MainPresenter(this, articlesInteractor, responseInterface);
+
+        presenter.getArticles();
+        setAdapter();
     }
 
     private void setAdapter() {
@@ -66,19 +64,6 @@ public class MainActivity extends AppCompatActivity implements Callback<Articles
         recyclerView.setAdapter(adapter);
 
         adapter.setOnArticleClickListener(this);
-    }
-
-    @Override
-    public void onResponse(@NonNull Call<ArticlesResponse> call, @NonNull Response<ArticlesResponse> response) {
-        if (response.body() != null) {
-            List<Article> articles = response.body().getArticles();
-            adapter.setArticles(articles);
-        }
-    }
-
-    @Override
-    public void onFailure(@NonNull Call<ArticlesResponse> call, @NonNull Throwable t) {
-        Toast.makeText(this, R.string.error_cant_get_articles, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -100,22 +85,42 @@ public class MainActivity extends AppCompatActivity implements Callback<Articles
         startFilter();
     }
 
+    @Override
+    public void showArticles(List<Article> articles) {
+        adapter.setArticles(articles);
+    }
+
+    @Override
+    public void setArticlesFailure() {
+        Toast.makeText(this, R.string.error_cant_get_articles, Toast.LENGTH_SHORT).show();
+    }
+
     public void startFilter() {
-        if (ValidationUtils.isEmpty(searchWord.getText().toString())) {
-            searchWord.setError(getText(R.string.wrong_input));
-        } else if (date == null) {
-            Toast.makeText(this, getText(R.string.wrong_date), Toast.LENGTH_SHORT).show();
-        } else {
-            startActivity(ArticlesSearchActivity.getLaunchIntent(this, searchWord.getText().toString(), date));
-        }
+        presenter.onArticleDateSearch(searchWord.getText().toString(), date);
+    }
+
+    @Override
+    public void setDateError() {
+        Toast.makeText(this, getString(R.string.wrong_date), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void startSearchActivity(String text, String date) {
+        startActivity(ArticlesSearchActivity.getLaunchIntent(this, text, date));
     }
 
     @OnClick(R.id.showArticlesBasedOnInput)
     public void startSearch() {
-        if (ValidationUtils.isEmpty(searchWord.getText().toString())) {
-            searchWord.setError(getText(R.string.wrong_input));
-        } else {
-            startActivity(ArticlesSearchActivity.getLaunchIntent(this, searchWord.getText().toString()));
-        }
+        presenter.onArticleInputSearch(searchWord.getText().toString());
+    }
+
+    @Override
+    public void setSearchError() {
+        searchWord.setError(getString(R.string.wrong_input));
+    }
+
+    @Override
+    public void startSearchActivity(String text) {
+        startActivity(ArticlesSearchActivity.getLaunchIntent(this, text));
     }
 }
