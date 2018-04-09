@@ -25,6 +25,7 @@ public interface MainContract {
 
         void showArticles(List<Article> articles);
 
+        void startArticleDetails(String url);
     }
 
     interface Presenter {
@@ -37,6 +38,6 @@ public interface MainContract {
 
         void getArticles();
 
-        void getDate();
+        void articleDetails(String url);
     }
 }

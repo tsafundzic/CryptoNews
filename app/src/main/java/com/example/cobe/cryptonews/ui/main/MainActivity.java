@@ -15,15 +15,12 @@ import com.example.cobe.cryptonews.R;
 import com.example.cobe.cryptonews.api.ApiClient;
 import com.example.cobe.cryptonews.api.ArticlesInteractorImpl;
 import com.example.cobe.cryptonews.api.ArticlesInteractorInterface;
-import com.example.cobe.cryptonews.api.ResponseInterface;
 import com.example.cobe.cryptonews.comm.DialogUtils;
 import com.example.cobe.cryptonews.ui.articleSearch.ArticlesSearchActivity;
 import com.example.cobe.cryptonews.ui.articles.ArticleAdapter;
-import com.example.cobe.cryptonews.constants.Constants;
 import com.example.cobe.cryptonews.listeners.OnArticleClickListener;
 import com.example.cobe.cryptonews.model.Article;
 
-import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
@@ -39,10 +36,8 @@ public class MainActivity extends AppCompatActivity implements OnArticleClickLis
     EditText searchWord;
 
     private final ArticleAdapter adapter = new ArticleAdapter();
-    private String date;
 
     private MainContract.Presenter presenter;
-    private ResponseInterface responseInterface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements OnArticleClickLis
 
         ArticlesInteractorInterface articlesInteractor = new ArticlesInteractorImpl(ApiClient.getApi());
 
-        presenter = new MainPresenter(this, articlesInteractor, responseInterface);
+        presenter = new MainPresenter(this, articlesInteractor);
 
         presenter.getArticles();
         setAdapter();
@@ -68,8 +63,7 @@ public class MainActivity extends AppCompatActivity implements OnArticleClickLis
 
     @Override
     public void onArticleClick(String url) {
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-        startActivity(intent);
+        presenter.articleDetails(url);
     }
 
     @OnClick(R.id.selectDate)
@@ -79,10 +73,7 @@ public class MainActivity extends AppCompatActivity implements OnArticleClickLis
 
     @Override
     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(year, month, day);
-        date = Constants.format.format(calendar.getTime());
-        startFilter();
+        startFilter(DialogUtils.getDate(year, month, day));
     }
 
     @Override
@@ -91,11 +82,17 @@ public class MainActivity extends AppCompatActivity implements OnArticleClickLis
     }
 
     @Override
+    public void startArticleDetails(String url) {
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        startActivity(intent);
+    }
+
+    @Override
     public void setArticlesFailure() {
         Toast.makeText(this, R.string.error_cant_get_articles, Toast.LENGTH_SHORT).show();
     }
 
-    public void startFilter() {
+    public void startFilter(String date) {
         presenter.onArticleDateSearch(searchWord.getText().toString(), date);
     }
 
