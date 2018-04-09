@@ -19,4 +19,7 @@ public interface ArticlesInteractorInterface {
     }
 
     void getArticles(ResponseInterface responseInterface);
+
+    void getSearchedArticles(ResponseInterface responseInterface, String text, String date);
+
 }

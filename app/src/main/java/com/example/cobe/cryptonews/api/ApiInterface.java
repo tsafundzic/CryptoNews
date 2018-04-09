@@ -16,5 +16,5 @@ public interface ApiInterface {
     Call<ArticlesResponse> getArticles(@Query("sources") String sources, @Query("apiKey") String apiKey);
 
     @GET("v2/everything")
-    Call<ArticlesResponse> getArticleBasedOnDateAndTypedWord(@Query("q") String typedWord, @Query("from") String startDate, @Query("to") String endDate, @Query("apiKey") String apiKey);
+    Call<ArticlesResponse> getSearchedArticles(@Query("q") String typedWord, @Query("from") String startDate, @Query("to") String endDate, @Query("apiKey") String apiKey);
 }

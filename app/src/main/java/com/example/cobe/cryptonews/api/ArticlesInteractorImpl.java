@@ -21,11 +21,21 @@ public class ArticlesInteractorImpl implements ArticlesInteractorInterface {
     }
 
     @Override
-    public void getArticles(final ResponseInterface responseInterface) {
+    public void getArticles(ResponseInterface responseInterface) {
         Call<ArticlesResponse> call = apiInterface.getArticles(Constants.SOURCES, Constants.API_KEY);
+        callArticles(responseInterface, call);
+    }
+
+    @Override
+    public void getSearchedArticles(ResponseInterface responseInterface, String text, String date) {
+        Call<ArticlesResponse> call = apiInterface.getSearchedArticles(text, date, date, Constants.API_KEY);
+        callArticles(responseInterface, call);
+    }
+
+    private void callArticles(final ResponseInterface responseInterface, Call<ArticlesResponse> call) {
         call.enqueue(new Callback<ArticlesResponse>() {
             @Override
-            public void onResponse(@NonNull Call<ArticlesResponse> call, @NonNull Response<ArticlesResponse> response){
+            public void onResponse(@NonNull Call<ArticlesResponse> call, @NonNull Response<ArticlesResponse> response) {
                 responseInterface.onArticlesSuccess(response.body().getArticles());
             }
 
@@ -35,4 +45,5 @@ public class ArticlesInteractorImpl implements ArticlesInteractorInterface {
             }
         });
     }
+
 }
