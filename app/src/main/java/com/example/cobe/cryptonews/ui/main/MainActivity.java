@@ -13,9 +13,11 @@ import android.widget.Toast;
 
 import com.example.cobe.cryptonews.R;
 import com.example.cobe.cryptonews.api.ApiClient;
-import com.example.cobe.cryptonews.api.ArticlesInteractorImpl;
-import com.example.cobe.cryptonews.api.ArticlesInteractorInterface;
-import com.example.cobe.cryptonews.comm.DialogUtils;
+import com.example.cobe.cryptonews.interaction.ArticlesInteractorImpl;
+import com.example.cobe.cryptonews.interaction.ArticlesInteractorInterface;
+import com.example.cobe.cryptonews.common.utils.DialogUtils;
+import com.example.cobe.cryptonews.presentation.MainInterface;
+import com.example.cobe.cryptonews.presentation.implementation.MainPresenterImpl;
 import com.example.cobe.cryptonews.ui.articleSearch.ArticlesSearchActivity;
 import com.example.cobe.cryptonews.ui.articles.ArticleAdapter;
 import com.example.cobe.cryptonews.listeners.OnArticleClickListener;
@@ -27,7 +29,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends AppCompatActivity implements OnArticleClickListener, DatePickerDialog.OnDateSetListener, MainContract.View {
+public class MainActivity extends AppCompatActivity implements OnArticleClickListener, DatePickerDialog.OnDateSetListener, MainInterface.View {
 
     @BindView(R.id.rvArticleList)
     RecyclerView recyclerView;
@@ -37,21 +39,23 @@ public class MainActivity extends AppCompatActivity implements OnArticleClickLis
 
     private final ArticleAdapter adapter = new ArticleAdapter();
 
-    private MainContract.Presenter presenter;
+    private MainInterface.Presenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         ButterKnife.bind(this);
-
-        ArticlesInteractorInterface articlesInteractor = new ArticlesInteractorImpl(ApiClient.getApi());
-
-        presenter = new MainPresenter(this, articlesInteractor);
+        injectDependencies();
+        setAdapter();
 
         presenter.getArticles();
-        setAdapter();
+    }
+
+    private void injectDependencies() {
+        ArticlesInteractorInterface articlesInteractor = new ArticlesInteractorImpl(ApiClient.getApi());
+        presenter = new MainPresenterImpl(articlesInteractor);
+        presenter.setView(this);
     }
 
     private void setAdapter() {

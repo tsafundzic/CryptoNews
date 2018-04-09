@@ -1,4 +1,4 @@
-package com.example.cobe.cryptonews.ui.main;
+package com.example.cobe.cryptonews.presentation;
 
 
 import com.example.cobe.cryptonews.model.Article;
@@ -9,7 +9,7 @@ import java.util.List;
  * Created by cobe on 06/04/2018.
  */
 
-public interface MainContract {
+public interface MainInterface {
 
     interface View {
 
@@ -28,9 +28,7 @@ public interface MainContract {
         void startArticleDetails(String url);
     }
 
-    interface Presenter {
-
-        void setView(View view);
+    interface Presenter extends BasePresenter<View> {
 
         void onArticleInputSearch(String text);
 

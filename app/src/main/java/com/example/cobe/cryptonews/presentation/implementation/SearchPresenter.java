@@ -1,7 +1,8 @@
-package com.example.cobe.cryptonews.ui.articleSearch;
+package com.example.cobe.cryptonews.presentation.implementation;
 
-import com.example.cobe.cryptonews.api.ArticlesInteractorInterface;
+import com.example.cobe.cryptonews.interaction.ArticlesInteractorInterface;
 import com.example.cobe.cryptonews.model.Article;
+import com.example.cobe.cryptonews.presentation.SearchContract;
 
 import java.util.List;
 
@@ -14,8 +15,7 @@ public class SearchPresenter implements SearchContract.Presenter, ArticlesIntera
     private SearchContract.View view;
     private ArticlesInteractorInterface articlesInteractor;
 
-    SearchPresenter(SearchContract.View view, ArticlesInteractorInterface articlesInteractor) {
-        this.view = view;
+    public SearchPresenter(ArticlesInteractorInterface articlesInteractor) {
         this.articlesInteractor = articlesInteractor;
     }
 

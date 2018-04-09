@@ -1,4 +1,4 @@
-package com.example.cobe.cryptonews.api;
+package com.example.cobe.cryptonews.interaction;
 
 
 import com.example.cobe.cryptonews.model.Article;

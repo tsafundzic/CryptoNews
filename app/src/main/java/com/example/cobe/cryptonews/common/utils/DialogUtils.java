@@ -1,10 +1,9 @@
-package com.example.cobe.cryptonews.comm;
+package com.example.cobe.cryptonews.common.utils;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
-import android.widget.DatePicker;
 
-import com.example.cobe.cryptonews.constants.Constants;
+import com.example.cobe.cryptonews.common.constants.Constants;
 
 import java.util.Calendar;
 

@@ -10,8 +10,10 @@ import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.cobe.cryptonews.api.ArticlesInteractorImpl;
-import com.example.cobe.cryptonews.api.ArticlesInteractorInterface;
+import com.example.cobe.cryptonews.interaction.ArticlesInteractorImpl;
+import com.example.cobe.cryptonews.interaction.ArticlesInteractorInterface;
+import com.example.cobe.cryptonews.presentation.SearchContract;
+import com.example.cobe.cryptonews.presentation.implementation.SearchPresenter;
 import com.example.cobe.cryptonews.ui.articles.ArticleAdapter;
 import com.example.cobe.cryptonews.R;
 import com.example.cobe.cryptonews.api.ApiClient;
@@ -61,13 +63,16 @@ public class ArticlesSearchActivity extends AppCompatActivity implements OnArtic
         setContentView(R.layout.activity_articles_based_on_search_and_date);
 
         ButterKnife.bind(this);
-
-        ArticlesInteractorInterface articlesInteractor = new ArticlesInteractorImpl(ApiClient.getApi());
-
-        presenter = new SearchPresenter(this, articlesInteractor);
+        injectDependencies();
 
         receiveSearchDetails();
         setAdapter();
+    }
+
+    private void injectDependencies() {
+        ArticlesInteractorInterface articlesInteractor = new ArticlesInteractorImpl(ApiClient.getApi());
+        presenter = new SearchPresenter(articlesInteractor);
+        presenter.setView(this);
     }
 
     public void receiveSearchDetails() {

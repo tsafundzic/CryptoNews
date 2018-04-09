@@ -1,4 +1,4 @@
-package com.example.cobe.cryptonews.constants;
+package com.example.cobe.cryptonews.common.constants;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;

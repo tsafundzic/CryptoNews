@@ -1,8 +1,9 @@
-package com.example.cobe.cryptonews.api;
+package com.example.cobe.cryptonews.interaction;
 
 import android.support.annotation.NonNull;
 
-import com.example.cobe.cryptonews.constants.Constants;
+import com.example.cobe.cryptonews.api.ApiInterface;
+import com.example.cobe.cryptonews.common.constants.Constants;
 import com.example.cobe.cryptonews.model.ArticlesResponse;
 
 import retrofit2.Call;
@@ -14,7 +15,7 @@ import retrofit2.Response;
  */
 public class ArticlesInteractorImpl implements ArticlesInteractorInterface {
 
-    private ApiInterface apiInterface;
+    private final ApiInterface apiInterface;
 
     public ArticlesInteractorImpl(ApiInterface api) {
         this.apiInterface = api;
@@ -45,5 +46,4 @@ public class ArticlesInteractorImpl implements ArticlesInteractorInterface {
             }
         });
     }
-
 }

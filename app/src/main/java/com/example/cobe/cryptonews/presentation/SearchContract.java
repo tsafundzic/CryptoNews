@@ -1,4 +1,4 @@
-package com.example.cobe.cryptonews.ui.articleSearch;
+package com.example.cobe.cryptonews.presentation;
 
 import com.example.cobe.cryptonews.model.Article;
 

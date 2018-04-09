@@ -1,8 +1,9 @@
-package com.example.cobe.cryptonews.ui.main;
+package com.example.cobe.cryptonews.presentation.implementation;
 
-import com.example.cobe.cryptonews.api.ArticlesInteractorInterface;
-import com.example.cobe.cryptonews.comm.ValidationUtils;
+import com.example.cobe.cryptonews.interaction.ArticlesInteractorInterface;
+import com.example.cobe.cryptonews.common.utils.ValidationUtils;
 import com.example.cobe.cryptonews.model.Article;
+import com.example.cobe.cryptonews.presentation.MainInterface;
 
 import java.util.List;
 
@@ -10,18 +11,17 @@ import java.util.List;
  * Created by cobe on 06/04/2018.
  */
 
-public class MainPresenter implements MainContract.Presenter, ArticlesInteractorInterface.ResponseInterface {
+public class MainPresenterImpl implements MainInterface.Presenter, ArticlesInteractorInterface.ResponseInterface {
 
-    private MainContract.View view;
-    private ArticlesInteractorInterface articlesInteractor;
+    private MainInterface.View view;
+    private final ArticlesInteractorInterface articlesInteractor;
 
-    MainPresenter(MainContract.View view, ArticlesInteractorInterface articlesInteractor) {
-        this.view = view;
+    public MainPresenterImpl(ArticlesInteractorInterface articlesInteractor) {
         this.articlesInteractor = articlesInteractor;
     }
 
     @Override
-    public void setView(MainContract.View view) {
+    public void setView(MainInterface.View view) {
         this.view = view;
     }
 

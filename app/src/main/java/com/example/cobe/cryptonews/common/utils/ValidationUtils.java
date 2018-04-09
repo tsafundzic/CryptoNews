@@ -1,4 +1,4 @@
-package com.example.cobe.cryptonews.comm;
+package com.example.cobe.cryptonews.common.utils;
 
 /**
  * Created by cobe on 03/04/2018.
