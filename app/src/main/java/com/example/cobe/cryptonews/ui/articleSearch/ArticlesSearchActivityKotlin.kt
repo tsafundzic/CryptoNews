@@ -12,15 +12,16 @@ import com.example.cobe.cryptonews.api.ApiClient
 import com.example.cobe.cryptonews.interaction.ArticlesInteractorImpl
 import com.example.cobe.cryptonews.listeners.OnArticleClickListener
 import com.example.cobe.cryptonews.model.Article
-import com.example.cobe.cryptonews.presentation.SearchContract
-import com.example.cobe.cryptonews.presentation.implementation.SearchPresenter
+import com.example.cobe.cryptonews.presentation.SearchInterface
+import com.example.cobe.cryptonews.presentation.implementation.SearchPresenterImpl
 import com.example.cobe.cryptonews.ui.articles.ArticleAdapter
 import kotlinx.android.synthetic.main.activity_articles_search_kotlin.*
 
-class ArticlesSearchActivityKotlin : AppCompatActivity(), SearchContract.View, OnArticleClickListener {
+class ArticlesSearchActivityKotlin : AppCompatActivity(), SearchInterface.View, OnArticleClickListener {
+
 
     private val adapter = ArticleAdapter()
-    private var presenter: SearchContract.Presenter? = null
+    private lateinit var presenter: SearchInterface.Presenter
 
     companion object {
         val KEY_SEARCH = "SEARCH"
@@ -48,13 +49,13 @@ class ArticlesSearchActivityKotlin : AppCompatActivity(), SearchContract.View, O
 
     private fun receiveSearchDetails() {
         val intent = intent
-        presenter?.setTitle(intent.getStringExtra(KEY_SEARCH), intent.getStringExtra(KEY_DATE))
+        presenter.setTitle(intent.getStringExtra(KEY_SEARCH), intent.getStringExtra(KEY_DATE))
     }
 
     private fun injectDependencies() {
         val articlesInteractor = ArticlesInteractorImpl(ApiClient.getApi())
-        presenter = SearchPresenter(articlesInteractor)
-        presenter?.setView(this)
+        presenter = SearchPresenterImpl(articlesInteractor)
+        presenter.setView(this)
     }
 
     private fun setAdapter() {
@@ -64,10 +65,10 @@ class ArticlesSearchActivityKotlin : AppCompatActivity(), SearchContract.View, O
     }
 
     override fun onArticleClick(url: String) {
-        presenter?.articleDetails(url)
+        presenter.articleDetails(url)
     }
 
-    override fun showArticles(articles: MutableList<Article>?) {
+    override fun showArticles(articles: List<Article>) {
         adapter.setArticles(articles)
     }
 
@@ -83,7 +84,7 @@ class ArticlesSearchActivityKotlin : AppCompatActivity(), SearchContract.View, O
     override fun showTitle(title: String, date: String) {
         searchWord.text = title
         selectedDate.text = date
-        presenter?.getSearchedArticles(title, date)
+        presenter.getSearchedArticles(title, date)
     }
 
     private fun goBack() {

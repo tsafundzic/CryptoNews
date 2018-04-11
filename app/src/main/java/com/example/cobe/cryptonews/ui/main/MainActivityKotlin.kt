@@ -20,10 +20,10 @@ import com.example.cobe.cryptonews.ui.articleSearch.ArticlesSearchActivityKotlin
 import com.example.cobe.cryptonews.ui.articles.ArticleAdapter
 import kotlinx.android.synthetic.main.activity_main_kotlin.*
 
-class MainActivityKotlin : AppCompatActivity(), OnArticleClickListener, MainInterface.View, DatePickerDialog.OnDateSetListener {
+class MainActivityKotlin : AppCompatActivity(), MainInterface.View, DatePickerDialog.OnDateSetListener, OnArticleClickListener {
 
     private val adapter = ArticleAdapter()
-    private var presenter: MainInterface.Presenter? = null
+    private lateinit var presenter: MainInterface.Presenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +31,7 @@ class MainActivityKotlin : AppCompatActivity(), OnArticleClickListener, MainInte
 
         injectDependencies()
         setAdapter()
-        presenter?.getArticles()
+        presenter.getArticles()
 
         showArticlesBasedOnInput.setOnClickListener { startArticleSearch() }
         selectDate.setOnClickListener { showDialog() }
@@ -40,7 +40,7 @@ class MainActivityKotlin : AppCompatActivity(), OnArticleClickListener, MainInte
     private fun injectDependencies() {
         val articlesInteractor = ArticlesInteractorImpl(ApiClient.getApi())
         presenter = MainPresenterImpl(articlesInteractor)
-        presenter?.setView(this)
+        presenter.setView(this)
     }
 
     private fun setAdapter() {
@@ -58,15 +58,15 @@ class MainActivityKotlin : AppCompatActivity(), OnArticleClickListener, MainInte
     }
 
     private fun startFilter(date: String) {
-        presenter?.onArticleDateSearch(inputWord.text.toString(), date)
+        presenter.onArticleDateSearch(inputWord.text.toString(), date)
     }
 
     private fun startArticleSearch() {
-        presenter?.onArticleInputSearch(inputWord.text.toString())
+        presenter.onArticleInputSearch(inputWord.text.toString())
     }
 
     override fun onArticleClick(url: String) {
-        presenter?.articleDetails(url)
+        presenter.articleDetails(url)
     }
 
     override fun setSearchError() {

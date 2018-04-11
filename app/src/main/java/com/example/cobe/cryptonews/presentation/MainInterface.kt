@@ -6,7 +6,9 @@ import com.example.cobe.cryptonews.model.Article
  * Created by cobe on 11/04/2018.
  */
 interface MainInterface {
+
     interface View {
+        
         fun setSearchError()
 
         fun startSearchActivity(text: String)

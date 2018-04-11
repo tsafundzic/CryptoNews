@@ -10,8 +10,8 @@ import com.example.cobe.cryptonews.presentation.MainInterface
  */
 class MainPresenterImpl : MainInterface.Presenter, ArticlesInteractorInterface.ResponseInterface {
 
-    private var view: MainInterface.View? = null
-    val articlesInteractor: ArticlesInteractorInterface
+    private lateinit var view: MainInterface.View
+    private val articlesInteractor: ArticlesInteractorInterface
 
     constructor(articlesInteractor: ArticlesInteractorInterface) {
         this.articlesInteractor = articlesInteractor
@@ -23,19 +23,19 @@ class MainPresenterImpl : MainInterface.Presenter, ArticlesInteractorInterface.R
 
     override fun onArticleInputSearch(text: String) {
         if (ValidationUtils.isEmpty(text)) {
-            view?.setSearchError()
+            view.setSearchError()
         } else {
-            view?.startSearchActivity(text)
+            view.startSearchActivity(text)
         }
     }
 
     override fun onArticleDateSearch(text: String, date: String) {
         if (ValidationUtils.isEmpty(text)) {
-            view?.setSearchError()
+            view.setSearchError()
         } else if (ValidationUtils.isEmpty(date)) {
-            view?.setDateError()
+            view.setDateError()
         } else {
-            view?.startSearchActivity(text, date)
+            view.startSearchActivity(text, date)
         }
     }
 
@@ -44,14 +44,14 @@ class MainPresenterImpl : MainInterface.Presenter, ArticlesInteractorInterface.R
     }
 
     override fun articleDetails(url: String) {
-        view?.startArticleDetails(url)
+        view.startArticleDetails(url)
     }
 
     override fun onArticlesSuccess(articles: List<Article>) {
-        view?.showArticles(articles)
+        view.showArticles(articles)
     }
 
     override fun onArticlesError() {
-        view?.setArticlesFailure()
+        view.setArticlesFailure()
     }
 }
