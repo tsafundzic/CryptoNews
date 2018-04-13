@@ -6,4 +6,6 @@ package com.example.cobe.cryptonews.listeners
 interface OnArticleClickListener {
 
     fun onArticleClick(url: String)
+    operator fun invoke(url: String) {
+    }
 }

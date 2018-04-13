@@ -7,16 +7,15 @@ import com.example.cobe.cryptonews.model.Article
  */
 interface ArticlesInteractorInterface {
 
-    interface ResponseInterface {
+    interface ResponseInterface<in T> {
 
-        fun onArticlesSuccess(articles: List<Article>)
+        fun onArticlesSuccess(data: T)
 
         fun onArticlesError()
-
     }
 
-    fun getArticles(responseInterface: ResponseInterface)
+    fun getArticles(responseInterface: ResponseInterface<List<Article>>)
 
-    fun getSearchedArticles(responseInterface: ResponseInterface, text: String, date: String)
+    fun getSearchedArticles(responseInterface: ResponseInterface<List<Article>>, text: String, date: String)
 
 }

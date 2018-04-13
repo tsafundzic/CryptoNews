@@ -6,10 +6,10 @@ import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.widget.Toast
 import com.example.cobe.cryptonews.R
-import com.example.cobe.cryptonews.api.ApiClient
-import com.example.cobe.cryptonews.interaction.ArticlesInteractorImpl
+import com.example.cobe.cryptonews.api.ApiClient.Companion.getArticleInteractor
+import com.example.cobe.cryptonews.common.extensions.getIntent
+import com.example.cobe.cryptonews.common.helpers.toast
 import com.example.cobe.cryptonews.listeners.OnArticleClickListener
 import com.example.cobe.cryptonews.model.Article
 import com.example.cobe.cryptonews.presentation.SearchInterface
@@ -19,26 +19,23 @@ import kotlinx.android.synthetic.main.activity_articles_search.*
 
 class ArticlesSearchActivity : AppCompatActivity(), SearchInterface.View, OnArticleClickListener {
 
-    private val adapter = ArticleAdapter()
-    private lateinit var presenter: SearchInterface.Presenter
+    private val adapter by lazy { ArticleAdapter(this) }
+    private val presenter: SearchInterface.Presenter by lazy { SearchPresenterImpl(getArticleInteractor()) }
 
     companion object {
-        val KEY_SEARCH = "SEARCH"
-        var KEY_DATE = "DATE"
+        private const val KEY_SEARCH = "SEARCH"
+        private const val KEY_DATE = "DATE"
 
-        fun getLaunchIntent(from: Context, searchedWord: String, date: String): Intent {
-            val intent = Intent(from, ArticlesSearchActivity::class.java)
-            intent.putExtra(KEY_SEARCH, searchedWord)
-            intent.putExtra(KEY_DATE, date)
-            return intent
+        fun getLaunchIntent(from: Context, searchedWord: String, date: String) = from.getIntent<ArticlesSearchActivity>().apply {
+            putExtra(KEY_SEARCH, searchedWord)
+            putExtra(KEY_DATE, date)
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_articles_search)
-
-        injectDependencies()
+        presenter.setView(this)
 
         receiveSearchDetails()
         setAdapter()
@@ -51,25 +48,16 @@ class ArticlesSearchActivity : AppCompatActivity(), SearchInterface.View, OnArti
         presenter.setTitle(intent.getStringExtra(KEY_SEARCH), intent.getStringExtra(KEY_DATE))
     }
 
-    private fun injectDependencies() {
-        val articlesInteractor = ArticlesInteractorImpl(ApiClient.getApi())
-        presenter = SearchPresenterImpl(articlesInteractor)
-        presenter.setView(this)
-    }
-
     private fun setAdapter() {
         articlesSearchList.layoutManager = LinearLayoutManager(this)
         articlesSearchList.adapter = adapter
-        adapter.setOnArticleClickListener(this)
     }
 
     override fun onArticleClick(url: String) = presenter.articleDetails(url)
 
     override fun showArticles(articles: List<Article>) = adapter.setArticles(articles)
 
-    override fun articleFailure() {
-        Toast.makeText(this, getString(R.string.error_cant_get_articles), Toast.LENGTH_SHORT).show()
-    }
+    override fun articleFailure() = toast(getString(R.string.error_cant_get_articles))
 
     override fun startArticleDetails(url: String) {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))

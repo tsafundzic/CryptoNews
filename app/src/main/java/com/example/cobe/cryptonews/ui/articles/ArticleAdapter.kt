@@ -10,14 +10,10 @@ import com.example.cobe.cryptonews.model.Article
 /**
  * Created by cobe on 13/04/2018.
  */
-class ArticleAdapter : RecyclerView.Adapter<ArticleViewHolder>() {
+class ArticleAdapter(private val onArticleClickListener: OnArticleClickListener) : RecyclerView.Adapter<ArticleViewHolder>() {
 
+    //private val articles = mutableListOf()<Article>()
     private var articles: MutableList<Article> = ArrayList()
-    private lateinit var onArticleClickListener: OnArticleClickListener
-
-    fun setOnArticleClickListener(onArticleClickListener: OnArticleClickListener) {
-        this.onArticleClickListener = onArticleClickListener
-    }
 
     fun setArticles(articles: List<Article>) {
         this.articles.clear()
@@ -35,7 +31,5 @@ class ArticleAdapter : RecyclerView.Adapter<ArticleViewHolder>() {
         return ArticleViewHolder(view, onArticleClickListener)
     }
 
-    override fun getItemCount(): Int {
-        return articles.size
-    }
+    override fun getItemCount() = articles.size
 }
