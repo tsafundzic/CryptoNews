@@ -11,7 +11,7 @@ interface ArticlesInteractorInterface {
 
         fun onArticlesSuccess(articles: List<Article>)
 
-        fun onArticlesError();
+        fun onArticlesError()
 
     }
 

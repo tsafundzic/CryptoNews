@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ui.main.MainActivityKotlin"
+            android:name=".ui.main.MainActivity"
             android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,7 +21,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.articlesSearch.ArticlesBasedOnSearchActivity" />
-        <activity android:name=".ui.articleSearch.ArticlesSearchActivityKotlin"></activity>
+        <activity android:name=".ui.articleSearch.ArticlesSearchActivity"></activity>
     </application>
 
 </manifest>

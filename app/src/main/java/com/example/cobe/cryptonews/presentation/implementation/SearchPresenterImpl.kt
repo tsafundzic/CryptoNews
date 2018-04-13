@@ -7,14 +7,9 @@ import com.example.cobe.cryptonews.presentation.SearchInterface
 /**
  * Created by cobe on 11/04/2018.
  */
-class SearchPresenterImpl : SearchInterface.Presenter, ArticlesInteractorInterface.ResponseInterface {
+class SearchPresenterImpl(private var articlesInteractor: ArticlesInteractorInterface) : SearchInterface.Presenter, ArticlesInteractorInterface.ResponseInterface {
 
     private lateinit var view: SearchInterface.View
-    private var articlesInteractor: ArticlesInteractorInterface
-
-    constructor(articlesInteractor: ArticlesInteractorInterface) {
-        this.articlesInteractor = articlesInteractor
-    }
 
     override fun setView(view: SearchInterface.View) {
         this.view = view

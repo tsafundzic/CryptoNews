@@ -8,14 +8,9 @@ import com.example.cobe.cryptonews.presentation.MainInterface
 /**
  * Created by cobe on 11/04/2018.
  */
-class MainPresenterImpl : MainInterface.Presenter, ArticlesInteractorInterface.ResponseInterface {
+class MainPresenterImpl(private val articlesInteractor: ArticlesInteractorInterface) : MainInterface.Presenter, ArticlesInteractorInterface.ResponseInterface {
 
     private lateinit var view: MainInterface.View
-    private val articlesInteractor: ArticlesInteractorInterface
-
-    constructor(articlesInteractor: ArticlesInteractorInterface) {
-        this.articlesInteractor = articlesInteractor
-    }
 
     override fun setView(view: MainInterface.View) {
         this.view = view
@@ -30,12 +25,10 @@ class MainPresenterImpl : MainInterface.Presenter, ArticlesInteractorInterface.R
     }
 
     override fun onArticleDateSearch(text: String, date: String) {
-        if (ValidationUtils.isEmpty(text)) {
-            view.setSearchError()
-        } else if (ValidationUtils.isEmpty(date)) {
-            view.setDateError()
-        } else {
-            view.startSearchActivity(text, date)
+        when {
+            ValidationUtils.isEmpty(text) -> view.setSearchError()
+            ValidationUtils.isEmpty(date) -> view.setDateError()
+            else -> view.startSearchActivity(text, date)
         }
     }
 

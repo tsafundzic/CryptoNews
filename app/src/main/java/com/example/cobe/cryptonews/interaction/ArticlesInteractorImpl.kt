@@ -10,12 +10,7 @@ import retrofit2.Response
 /**
  * Created by cobe on 11/04/2018.
  */
-class ArticlesInteractorImpl : ArticlesInteractorInterface {
-    private val apiInterface: ApiInterface
-
-    constructor(apiInterface: ApiInterface) {
-        this.apiInterface = apiInterface
-    }
+class ArticlesInteractorImpl(private val apiInterface: ApiInterface) : ArticlesInteractorInterface {
 
     override fun getArticles(responseInterface: ArticlesInteractorInterface.ResponseInterface) {
         val call = apiInterface.getArticles(Constants.SOURCES, Constants.API_KEY)

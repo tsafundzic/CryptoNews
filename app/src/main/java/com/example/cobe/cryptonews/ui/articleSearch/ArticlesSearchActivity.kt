@@ -15,10 +15,9 @@ import com.example.cobe.cryptonews.model.Article
 import com.example.cobe.cryptonews.presentation.SearchInterface
 import com.example.cobe.cryptonews.presentation.implementation.SearchPresenterImpl
 import com.example.cobe.cryptonews.ui.articles.ArticleAdapter
-import kotlinx.android.synthetic.main.activity_articles_search_kotlin.*
+import kotlinx.android.synthetic.main.activity_articles_search.*
 
-class ArticlesSearchActivityKotlin : AppCompatActivity(), SearchInterface.View, OnArticleClickListener {
-
+class ArticlesSearchActivity : AppCompatActivity(), SearchInterface.View, OnArticleClickListener {
 
     private val adapter = ArticleAdapter()
     private lateinit var presenter: SearchInterface.Presenter
@@ -28,7 +27,7 @@ class ArticlesSearchActivityKotlin : AppCompatActivity(), SearchInterface.View, 
         var KEY_DATE = "DATE"
 
         fun getLaunchIntent(from: Context, searchedWord: String, date: String): Intent {
-            val intent = Intent(from, ArticlesSearchActivityKotlin::class.java)
+            val intent = Intent(from, ArticlesSearchActivity::class.java)
             intent.putExtra(KEY_SEARCH, searchedWord)
             intent.putExtra(KEY_DATE, date)
             return intent
@@ -37,7 +36,7 @@ class ArticlesSearchActivityKotlin : AppCompatActivity(), SearchInterface.View, 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_articles_search_kotlin)
+        setContentView(R.layout.activity_articles_search)
 
         injectDependencies()
 
@@ -64,13 +63,9 @@ class ArticlesSearchActivityKotlin : AppCompatActivity(), SearchInterface.View, 
         adapter.setOnArticleClickListener(this)
     }
 
-    override fun onArticleClick(url: String) {
-        presenter.articleDetails(url)
-    }
+    override fun onArticleClick(url: String) = presenter.articleDetails(url)
 
-    override fun showArticles(articles: List<Article>) {
-        adapter.setArticles(articles)
-    }
+    override fun showArticles(articles: List<Article>) = adapter.setArticles(articles)
 
     override fun articleFailure() {
         Toast.makeText(this, getString(R.string.error_cant_get_articles), Toast.LENGTH_SHORT).show()
@@ -87,8 +82,5 @@ class ArticlesSearchActivityKotlin : AppCompatActivity(), SearchInterface.View, 
         presenter.getSearchedArticles(title, date)
     }
 
-    private fun goBack() {
-        finish()
-    }
-
+    private fun goBack() = finish()
 }

@@ -16,18 +16,18 @@ import com.example.cobe.cryptonews.listeners.OnArticleClickListener
 import com.example.cobe.cryptonews.model.Article
 import com.example.cobe.cryptonews.presentation.MainInterface
 import com.example.cobe.cryptonews.presentation.implementation.MainPresenterImpl
-import com.example.cobe.cryptonews.ui.articleSearch.ArticlesSearchActivityKotlin
+import com.example.cobe.cryptonews.ui.articleSearch.ArticlesSearchActivity
 import com.example.cobe.cryptonews.ui.articles.ArticleAdapter
-import kotlinx.android.synthetic.main.activity_main_kotlin.*
+import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivityKotlin : AppCompatActivity(), MainInterface.View, DatePickerDialog.OnDateSetListener, OnArticleClickListener {
+class MainActivity : AppCompatActivity(), MainInterface.View, DatePickerDialog.OnDateSetListener, OnArticleClickListener {
 
     private val adapter = ArticleAdapter()
     private lateinit var presenter: MainInterface.Presenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main_kotlin)
+        setContentView(R.layout.activity_main)
 
         injectDependencies()
         setAdapter()
@@ -74,11 +74,11 @@ class MainActivityKotlin : AppCompatActivity(), MainInterface.View, DatePickerDi
     }
 
     override fun startSearchActivity(text: String) {
-        startActivity(ArticlesSearchActivityKotlin.getLaunchIntent(this, text, ""))
+        startActivity(ArticlesSearchActivity.getLaunchIntent(this, text, ""))
     }
 
     override fun startSearchActivity(text: String, date: String) {
-        startActivity(ArticlesSearchActivityKotlin.getLaunchIntent(this, text, date))
+        startActivity(ArticlesSearchActivity.getLaunchIntent(this, text, date))
     }
 
     override fun setDateError() {
